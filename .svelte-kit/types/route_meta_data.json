@@ -1,0 +1,51 @@
+{
+	"/": [
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/forgot-password": [
+		"src/routes/forgot-password/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/partner/dashboard": [
+		"src/routes/+layout.server.ts"
+	],
+	"/partner/verification": [
+		"src/routes/+layout.server.ts"
+	],
+	"/partner/verified-residents": [
+		"src/routes/+layout.server.ts"
+	],
+	"/register": [
+		"src/routes/register/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/resident/dashboard": [
+		"src/routes/+layout.server.ts"
+	],
+	"/resident/privacy-policy": [
+		"src/routes/+layout.server.ts"
+	],
+	"/resident/verification": [
+		"src/routes/+layout.server.ts"
+	],
+	"/trello/building": [
+		"src/routes/trello/building/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/trello/resident": [
+		"src/routes/trello/resident/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/trello/resident/bypass": [
+		"src/routes/trello/resident/bypass/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/trello/support": [
+		"src/routes/trello/support/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/update-password": [
+		"src/routes/+layout.server.ts"
+	]
+}
