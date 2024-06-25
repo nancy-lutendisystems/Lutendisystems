@@ -2,11 +2,9 @@
     import Input from "../../components/Input.svelte";
     import { fade } from 'svelte/transition';
 
-    
-
     import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
     let role: number = 0;
-
+   
     // Flash message
     import { getFlash } from 'sveltekit-flash-message';
     import { page } from '$app/stores';
@@ -19,6 +17,7 @@
             submit = false;
         }, 5000);
     }
+
 </script>
 
 <div class="flex min-h-full flex-col justify-center px-5 py-12 lg:px-8">
@@ -30,9 +29,8 @@
       <form class="space-y-6" action="/register" method="POST" on:submit={submitTimeout}>
         <div>
           <div class="mt-2">
-            <Input name="email" label="Email" title="Email" type="email" placeholder="example@domain.com" maxlength={255} minlength={0}></Input>
+            <Input name="email" label="Email" title="Email" type="email" placeholder="example@domain.com" maxlength={500} minlength={0}></Input>
           </div>
-        
         </div>
   
         <div>
@@ -51,21 +49,6 @@
             </div>
         </div>
 
-        {#if role == 0}
-            <div in:fade>
-                <div class="mt-2">
-                    <label class="label font-medium">
-                        <span>Building ID<span class="text-red-500">*</span></span>
-                        <input class="input" name="building-id" title="Building ID" type="text" placeholder="XXXXXXXX" minlength={8} maxlength={8} required bind:value={$page.data.buildingId}/>
-                    </label>
-                    {#if $flash}
-                        {@const text = $flash.type == 'success' ? '#3D9970' : '#FF4136'}
-                        <div style:color={text} class="flash">{$flash.message}</div>
-                    {/if}
-                </div>
-            </div>
-        {/if}
-  
         <div>
             <button type="submit" class="flex w-full justify-center btn btn-md variant-filled-primary" disabled={submit}>Register</button>
         </div>

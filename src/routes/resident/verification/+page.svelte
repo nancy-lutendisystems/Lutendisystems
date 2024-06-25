@@ -10,6 +10,12 @@
     import ResidentSupport from "../../../components/ResidentSupport.svelte";
     import { fade } from "svelte/transition";
     import { getFileInfo, checkFile } from "$lib";
+//added by yanping
+    import Selectbuilding from '../../../components/Selectbuilding.svelte';
+    import { initFlash } from "sveltekit-flash-message";
+ 
+
+//end  
 
     // Stores
     const modalStore = getModalStore();
@@ -58,6 +64,35 @@
     let email: any;
     let buildingId: any;
 
+
+//added by yanping
+    let numofbuildings: number;
+    let buildingidaddr: { id: number, street: string, city: string }[] = [];
+    let selected: { id: number, street: string } | undefined;
+    
+    onMount(async () => {
+        const { data, error } = await supabase.from("active_buildings").select('id, street,city');
+        if (error) {
+            console.error("Error fetching data:", error);
+            return;
+        }
+        if (data) {
+            numofbuildings = data.length;
+            buildingidaddr =  data.map(item => ({ id: item.id, street: item.street,city: item.city })).sort((a, b) => a.street > b.street ? 1 : -1);;
+        }
+    });
+  
+    $: selected , assignbuildingid();
+    
+
+    function assignbuildingid() {
+        buildingId = selected?.id;
+        return buildingId;
+    }
+
+//end
+
+
     // On page render, check if user is allowed to view, get id and email to populate verification form
     // If verified then send back to dashboard
     onMount(async () => {
@@ -73,9 +108,6 @@
         if (data.verified == true) {
             goto("/resident/dashboard")
         }
-        else {
-            buildingId = data.building_id
-        }
     })
 
     // Form state variables
@@ -83,7 +115,7 @@
     let first_name: string;
     let middle_name: string;
     let last_name: string;
-    let dob: string;
+    let dob: Date;
     let phone_number: string;
 
     let stepThree: boolean = true;
@@ -128,7 +160,7 @@
         }
 
         // Step 3 validation
-        if (cosign == 0 && unit && move_in) {
+        if (cosign == 0 && unit && move_in && selected) {
             stepThree = false;
         }
         else {
@@ -165,6 +197,7 @@
                         return
                     }
 
+
             const { data: third_insert, error: third_error} = await supabase.storage.from("resident_gov_photo_id")
                 .upload(`${buildingId}/${id}${govDocData.extension}`, govDoc[0], {upsert: false, contentType: govDocData.contentType})
                     if (third_error) {
@@ -195,7 +228,7 @@
             }
 
             const { data, error: status_error } = await supabase.from("resident_verification_status")
-                .update({verified: true}).eq("id", id)
+                .update({verified: true,building_id: buildingId}).eq("id", id)
                     if (status_error) {
                         toastStore.trigger(errorC)
                         isLoading = false
@@ -231,6 +264,8 @@
                                 goto('/resident/dashboard');
                             }
                     }
+            
+
     }
 </script>
 {#if isLoading}
@@ -270,7 +305,9 @@
                             <div>
                                 <label class="label font-medium">
                                     <span>Date of Birth<span class="text-red-500">*</span></span>
-                                    <input class="input" name="dob" title="Date of Birth" type="date" placeholder="Input (Date)" required bind:value={dob}>
+ <!--                                   <input class="input" name="dob" title="Date of Birth" type="date" placeholder="Input (Date)" required bind:value={dob}>  -->
+                                    <input class="input" name="dob" title="Date of Birth" type="date" max="3024-12-31" required bind:value={dob}>
+
                                 </label>
                             </div>
                             <div>
@@ -280,9 +317,10 @@
                                 </label>
                             </div>
                         </div>
+
                         <input name="email" type="hidden" value={email}>
                         <input name="id" type="hidden" value={id}>
-                        <input name="building-id" type="hidden" value={buildingId}>
+                        <input name="building-id" type="hidden" value={buildingId}> 
                     </div>
                     <svelte:fragment slot="navigation">
                         <button hidden></button>
@@ -300,15 +338,28 @@
                         <div>
                             <label class="label font-medium">
                                 <span>Move In Date<span class="text-red-500">*</span></span>
-                                <input class="input" name="move_in" title="Move In Date" type="date" placeholder="Input (Date)" required bind:value={move_in}>
+                                <input class="input" name="move_in" title="Move In Date" type="date" max="3024-12-31" required bind:value={move_in}>
                             </label>
                         </div>
                         <div>
                             <label class="label font-medium">
                                 <span>Expected Move Out Date</span>
-                                <input class="input" name="move_out" title="Move Out Date" type="date" placeholder="Input (Date)" bind:value={move_out}>
+                                <input class="input" name="move_out" title="Move Out Date" type="date" max="3024-12-31" bind:value={move_out}>
                             </label>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-5">
+                        <label class="label font-medium">
+                            <span>Please select address *</span>
+                            <select name="myselected" class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm" style="background-color: #374151; border-radius: 25px;" on:selectionchange={assignbuildingid()} required bind:value={selected}>
+                                <option value="" disabled selected>Select your building</option>
+                                {#each buildingidaddr as buildaddr}
+                                    <option value={buildaddr}>
+                                        {buildaddr.street} ,  {buildaddr.city}
+                                    </option>
+                                {/each}
+                            </select>
+                        </label>
                     </div>
                     <div class="grid gap-5 md:flex">
                         <div class="mt-1">
@@ -351,7 +402,7 @@
                                 <div>
                                     <label class="label font-medium">
                                         <span>Date of Birth<span class="text-red-500">*</span></span>
-                                        <input class="input" name="c_dob" title="Co-Signer Date of Birth" type="date" placeholder="Input (Date)" required bind:value={c_dob}>
+                                        <input class="input" name="c_dob" title="Co-Signer Date of Birth" type="date" max="3024-12-31" required bind:value={c_dob}>
                                     </label>
                                 </div>
                                 <div>

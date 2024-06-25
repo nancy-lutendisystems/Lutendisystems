@@ -51,7 +51,7 @@
                         Sign Out
                     </button>
                 {:else}
-                    <a in:fade class="btn btn-sm variant-ghost-surface" href="mailto:support@lutedisystems.com">
+                    <a in:fade class="btn btn-sm variant-ghost-surface" href="mailto:support@lutendisystems.com">
                         Support
                     </a>
                 {/if}

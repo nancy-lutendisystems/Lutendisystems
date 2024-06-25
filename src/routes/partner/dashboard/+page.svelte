@@ -245,7 +245,8 @@
                     <table class="table table-compact table-hover variant-soft">
                         <thead>
                             <tr>
-                                <th>ID</th>
+<!--                                <th>ID</th>
+-->
                                 <th>Alias</th>
                                 <th>Address</th>
                                 <th class="text-center">Registrants</th>
@@ -254,8 +255,12 @@
                         </thead>
                         <tbody>
                             {#each paginatedBuildings as building}
-                                <tr class="cursor-pointer" in:fade use:popup={popupClick} on:click={() => selectedBuilding = building.id}>
-                                    <td>{building.id}</td>
+<!--                                <tr class="cursor-pointer" in:fade use:popup={popupClick} on:click={() => selectedBuilding = building.id}>
+-->                             <tr>    
+
+                                    <!--                                    <td>{building.id}</td>
+
+  -->  
                                     <td>{building.alias}</td>
                                     <td>{building.street}, {building.city}</td>
                                     <td class="text-center text-warning-500">{building.registered}</td>
@@ -296,8 +301,8 @@
                     <div class="flex gap-2 flex-wrap pt-2">
                         <a class="chip variant-ghost-primary" href="https://www.lutendi.com/legal" target="_blank">Legal</a>
                         <a class="chip variant-ghost-primary" href="https://www.lutendi.com/security" target="_blank">Security</a>
-                        <a class="chip variant-ghost-secondary" href="https://drive.google.com/file/d/1BYPc2k0d1YHYV9aEoyuEjuOgW924oybE/view?usp=sharing" target="_blank">Partner Onboarding</a>
-                        <a class="chip variant-ghost-secondary" href="https://drive.google.com/file/d/1OJCMghy5dbLT_e30GLJVrqPzjSDkg1VD/view?usp=sharing" target="_blank">Partner Portal Guide</a>
+                        <a class="chip variant-ghost-secondary" href="https://drive.google.com/file/d/1tMSljAGu1jwL4rwRbyXpNfrhe1Ng2-aO/view?usp=sharing" target="_blank">Partner Onboarding</a>
+                        <a class="chip variant-ghost-secondary" href="https://drive.google.com/file/d/1OJCMghy5dbLT_e30GLJVrqPzjSDkg1VD/view" target="_blank">Partner Portal Guide</a>
                         <a class="chip variant-ghost-tertiary" href="https://drive.google.com/file/d/1D0IZ33Fgpb-f3IdO9KeAAaGGD6w5iMli/view?usp=sharing" target="_blank">Resident Portal Guide</a>
                     </div>
                 </div>

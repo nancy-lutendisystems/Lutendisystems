@@ -173,7 +173,7 @@
                     <div>
                         <label class="label font-medium">
                             <span>Phone Number<span class="text-red-500">*</span></span>
-                            <input class="input" name="phone_number" title="Phone Number" type="text" placeholder="XXX XXX-XXXX" required bind:value={phone_number}>
+                            <input class="input" name="phone_number" title="Phone Number" type="text" placeholder="XXX XXX-XXXX" minlength={10} maxlength={10} required bind:value={phone_number} >
                         </label>
                     </div>
                     {#if bypass == 1}
